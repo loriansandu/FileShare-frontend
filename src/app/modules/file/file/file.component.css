@@ -1,0 +1,685 @@
+.drag-drop-container {
+  min-height: 100vh;
+  width: 100vw;
+  transition: background-color 0.3s ease;
+  background-image: url('src/assets/pexels-scott-webb-305821.jpg');
+  /* Set background properties, adjust as needed */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.drag-over {
+  border-color: #4caf50; /* Change the border color when dragging over */
+  opacity: 1;
+}
+
+.drag-active {
+  background: #5268FF;
+
+  .drag-drop-text {
+    pointer-events: none;
+    position: absolute;
+    left: 40%;
+    top: 45%;
+    text-align: center;
+    color: white;
+
+    h1 {
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+    }
+  }
+}
+
+.container {
+  height: 25.625em;
+  left: 5em;
+  margin: -13.8125em 0 0;
+  border-radius: 10px;
+  box-shadow: 0 0 12px 0 rgba(0,0,0,.1), 0 10px 30px 0 rgba(0,0,0,.2);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  z-index: 30;
+  width: 17.5em;
+  transition: transform .5s cubic-bezier(.77,0,.175,1);
+
+  .uploading-stopped-container {
+    .upload {
+      display: flex;
+      cursor: pointer;
+      min-height: 11.125em;
+      outline: 0;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      align-items: center;
+      padding: 0 1.25em;
+
+      .select-file-button {
+        background: #5268FF;
+        height: 2.65em;
+        width: 2.65em;
+        margin-right: 10px;
+        flex-shrink: 0;
+      }
+      .file-input {
+        display: none;
+      }
+      .select-file-text {
+        display: block;
+        font-size: 1.375em;
+        line-height: 120%;
+        margin: 0;
+        font-weight: 350;
+        font-family: -apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+        font-family: Actief Grotesque Normal,-apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+        padding: 0;
+        text-align: left;
+        transition: all .4s cubic-bezier(.77,0,.175,1);
+        margin-bottom: 0.25em;
+      }
+      .select-file-subtext {
+        font-size: .75em;
+        line-height: 1;
+        margin: 0;
+        padding: 0;
+        font-weight: 400;
+        transition: all .4s cubic-bezier(.77,0,.175,1);
+        vertical-align: top;
+        display: inline-block;
+        background-color: transparent;
+        border: 0;
+        border-bottom: 0.0625em solid #484a4d;
+        color: #484a4d;
+        cursor: pointer;
+        outline: 0;
+      }
+    }
+    .uploaded-files-list {
+      min-height: 11.125em;
+    }
+    .uploaded-file {
+      border-bottom: 1px solid #e8ebed;
+      margin: 0 0.625em;
+      outline: 0;
+      padding: 0.5em 0.625em;
+      position: relative;
+
+      .uploaded-file-title {
+        font-weight: 400;
+        line-height: 1.4285714286em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-bottom: 5px;
+        box-sizing: border-box;
+      }
+
+      .uploaded-file-info {
+        font-weight: 400;
+        font-family: "Actief Grotesque Normal", -apple-system, ".SFNSText-Regular", "San Francisco", Roboto, "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+        color: rgb(106, 109, 112);
+        display: block;
+        font-size: 0.75em;
+        line-height: 1.16667em;
+      }
+
+      .uploaded-file-delete-button {
+        background: linear-gradient(90deg,hsla(0,0%,100%,0) 0,#f7f9fa 35%,#f7f9fa);
+        background: white;
+        bottom: 0.3125em;
+        /*height: 100%;*/
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 4.125em;
+        cursor: pointer;
+        border: 0;
+
+        svg {
+          height: 1.25rem;
+          width: 1.25rem;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+
+          path {
+            fill: #5268ff;
+          }
+        }
+        svg:hover path {
+          fill: #3741d9;
+        }
+      }
+
+
+
+    }
+    .file-size-limit-container {
+      display: flex;
+      align-items: center;
+      box-shadow: inset 0 -1px 0 #e8ebed, inset 0 1px 0 #e8ebed;
+      background: #f7f9fa;
+      height: 2rem;
+      font-size: .81rem;
+      line-height: 1.125rem;
+      justify-content: center;
+
+      .file-size-limit {
+        color: #6a6d70;
+      }
+    }
+    .file-options {
+      /*border-top: 1px solid #d4d7d9;*/
+      padding: 0 10px;
+
+      .file-expire, .file-password{
+        border-bottom: 1px solid #d4d7d9;
+        cursor: default;
+        padding: 0.625em;
+        position: relative;
+
+        label{
+          box-sizing: border-box;
+          font-weight: 400;
+          color: #484a4d;
+          display: block;
+          font-size: .85em;
+          margin: 0 0.625em 5px 0;
+          width: 10.1666666667em;
+        }
+        input {
+          cursor: pointer;
+          display: inline;
+          font-size: .875em;
+          /*color: rgba(23,24,26,.2);*/
+          border: none;
+
+          &:focus {
+            outline: none;
+            font-size: 15px;
+          }
+        }
+        .days-dropdown {
+          border: none;
+          box-shadow: none;
+
+          .p-dropdown-label {
+            font-size: .875em;
+          }
+
+          .p-dropdown-trigger {
+            width: 2.5em!important;
+            color: rgb(82, 104, 255);
+            font-size: .875em;
+          }
+
+          .p-dropdown-items-wrapper {
+            font-size: .875em;
+            /*height: 80px;*/
+          }
+
+          .p-dropdown-item {
+            padding: 7px 0;
+          }
+
+        }
+      }
+    }
+
+  }
+  .uploading-in-progress-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    height: 75%;
+
+    .loading-circle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 30px;
+      margin-bottom: 20px;
+
+      #progress{
+        height: 200px;
+        width: 200px;
+      }
+      .percentage {
+        position: absolute;
+        display: flex;
+
+        .number {
+          color: #17181a;
+          font-feature-settings: "lnum";
+          font-size: 3.875em;
+          font-weight: 400;
+          font-variant-numeric: lining-nums;
+          white-space: nowrap;
+        }
+        .sign {
+          color: #babcbf;
+          display: inline-block;
+          font-size: 20px;
+          font-weight: 400;
+          line-height: 1;
+          position: relative;
+          top: .2727272727em;
+          vertical-align: top
+        }
+      }
+    }
+    .transfer-in-progress {
+
+      .transfer {
+        color: #17181a;
+        font-size: 1.375em;
+        font-weight: 400;
+        font-family: -apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+        font-family: Actief Grotesque Medium,-apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+        line-height: 1.2;
+        margin: 0 0 0.3636363636em;
+        padding: 0 0.9090909091em;
+        text-align: center;
+
+      }
+      p {
+        color: #484a4d;
+        font-weight: 400;
+        font-family: -apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+        font-family: Actief Grotesque Normal,-apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+        font-size: .8125em;
+        line-height: 1.6153846154em;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+    }
+    .transfer-paused {
+      color: #17181a;
+      font-size: 1.375em;
+      font-weight: 400;
+      line-height: 1.2;
+      margin: 0 0 0.3636363636em;
+      padding: 0 0.9090909091em;
+      text-align: center;
+    }
+
+  }
+  .uploading-success-container {
+    padding: 0 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-weight: 400;
+    /*height: 21.125em;*/
+    overflow: hidden;
+    position: static;
+
+    .upload-success-video {
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 100%;
+      opacity: 1;
+      transition: opacity .1s ease-out;
+      display: block;
+      height: 12.5rem;
+      width: 17.5rem;
+      margin: 0 auto 1.5em -1.25rem;
+      margin-bottom: 0.5em;
+    }
+
+    .upload-success-info {
+      color: #484a4d;
+      font-size: .875em;
+      margin: 0 0 0.9285714286em;
+      padding: 0;
+      text-align: center;
+      white-space: pre-wrap;
+      line-height: 1.5em;
+
+      h2 {
+        font-size: 1.25rem;
+        margin-bottom: 0.375rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+      .upload-message {
+        color: #484a4d;
+        font-size: .875em;
+        margin: 0 0 0.9285714286em;
+        padding: 0;
+        text-align: center;
+        white-space: pre-wrap;
+        line-height: 1.5em;
+      }
+      .upload-link {
+        height: 2.625em;
+        position: relative;
+        transition: all .4s;
+
+        .upload-link-wrapper {
+          background-color: #fff;
+          border: 1px solid #babcbf;
+          border-radius: 5px;
+          bottom: 0;
+          height: 2.625em;
+          min-width: 100%;
+          overflow: hidden;
+          position: absolute;
+          right: 0;
+          text-align: right;
+          transition: inherit;
+          white-space: nowrap;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .upload-link-url {
+            border: 0;
+            color: #484a4d;
+            /*font-size: .875em;*/
+            margin: 0;
+            outline: none;
+            padding: 0 1em;
+            text-align: center;
+            transition: inherit;
+            width: 85%;
+            height: 100%;
+          }
+          .upload-link-url::selection {
+            background: #5268ff;
+            color: #fff;
+          }
+          .copy-link-icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 100%;
+            color: black;
+            cursor: pointer;
+            border-left: 1px solid #babcbf;
+            &:hover {
+              background-color: #f0f1f1;
+              transition: inherit;
+            }
+
+          }
+        }
+      }
+    }
+  }
+  .uploading-download-container {
+    .uploading-download-header {
+      height: auto;
+      min-height: 16em;
+      padding-top: 1.875em;
+      align-items: center;
+      border-bottom: 1px solid #e8ebed;
+      display: block;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1.875em 0 0.75em;
+
+      .uploading-download-image {
+        height: 8.75em;
+        width: 8.75em;
+        display: block;
+        margin: 0 auto 0.75em;
+      }
+      .uploading-download-title {
+        margin: 0 0 0.0625em;
+        padding: 0 0.9090909091em;
+        font-weight: 500;
+        color: #17181a;
+        font-size: 1.375em;
+        line-height: 1.2;
+        text-align: center;
+      }
+      .uploading-download-subtitle {
+        font-weight: 400;
+        color: #6a6d70;
+        margin: 0;
+        font-size: .8125em;
+        line-height: 1.3846153846em;
+        padding: 0 1.5384615385em;
+        text-align: center;
+      }
+      .alert-error {
+        height: 58px;
+        color: red;
+        position: absolute;
+        width: 100%;
+        max-width: 350px;
+        border: 1px solid #e91916;
+        border-left: 0.4rem solid #e91916;
+        border-radius: 0.6rem;
+        padding: 1rem 2rem 1rem 1rem;
+        font-size: 15px;
+        line-height: 21px;
+        background: white;
+        top: 186px;
+      }
+    }
+    .uploading-download-file-details {
+      margin: 0;
+      padding: 0.5em 1.25em;
+      height: 82px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .file-name {
+        width: max-content;
+        max-width: -webkit-fill-available;
+        font-weight: 400;
+        color: #17181a;
+        display: block;
+        font-size: .975em;
+        line-height: 1.4285714286em;
+        margin-bottom: 7px;
+        overflow: hidden;
+        padding: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .file-details {
+        font-weight: 400;
+        color: rgb(106, 109, 112);
+        display: flex;
+        font-size: 0.80em;
+        line-height: 1.16667em;
+        margin: 0px;
+
+        .file-details-size {
+
+          &:after {
+            content: "·";
+            display: inline-block;
+            padding: 0px 0.375em;
+            text-decoration: none;
+          }
+        }
+
+      }
+      .file-password{
+        border-bottom: 1px solid #d4d7d9;
+        cursor: default;
+        padding: 0.625em;
+        position: relative;
+
+        label{
+          box-sizing: border-box;
+          font-weight: 400;
+          color: #484a4d;
+          display: block;
+          font-size: .85em;
+          margin: 0 0.625em 5px 0;
+          width: 10.1666666667em;
+        }
+        input {
+          width: 100%;
+          cursor: pointer;
+          display: inline;
+          border-radius: 8px;
+          border-width: 0.5px;
+          height: 25px;
+          padding: 15px;
+
+          &:focus {
+            outline: none;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+  .uploading-expired-container {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-weight: 400;
+    font-family: -apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+    font-family: Actief Grotesque Normal,-apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
+    height: 21.125em;
+    overflow: hidden;
+    position: static;
+
+    .upload-expired-video {
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 100%;
+      opacity: 1;
+      transition: opacity .1s ease-out;
+      display: block;
+      margin: 0 auto 1.5em;
+      height: 12.5rem;
+      width: 17.5rem;
+    }
+    h2 {
+      font-weight: 400;
+      color: #17181a;
+      font-size: 1.375em;
+      line-height: 1.2;
+      padding: 0 0.4545454545em;
+      text-align: center;
+      margin: 0 0 1.1875em;
+    }
+    p {
+      font-weight: 400;
+      font-size: .8125em;
+      color: #484a4d;
+      line-height: 1.4;
+      margin: 0 0 0.625em;
+      padding: 0 1.875em;
+      text-align: center;
+      white-space: pre-wrap;
+    }
+  }
+  .submit-container {
+    border-top: 1px solid #d4d7d9;
+    height: 4.5em;
+    padding: 0 1.25em;
+    position: relative;
+    margin-top: auto;
+    /*top: 140px;*/
+
+    .transfer-button {
+      left: 50%;
+      position: relative;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      border-width: 1px;
+      border-style: solid;
+      border-radius: 1.25em;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 1em;
+      height: 2.5em;
+      outline: 0;
+      font-weight: 500;
+      width: 9.75em;
+
+    }
+    .submit {
+      background: #5268ff;
+      color: #fff;
+      border-color: #5268ff;
+
+      &:hover {
+        background-color: #3741d9;
+        border-color: #3741d9;
+      }
+    }
+    .submit-button-inactive, .submit-button-inactive:hover {
+      background: #babcbf;
+      border-color: #babcbf;
+      color: #fff;
+      cursor: default;
+    }
+    .cancel {
+      background: transparent;
+      color: #5268ff;
+      border-color: #5268ff;
+
+      &:hover {
+        border-color: #3741d9;
+        color: #3741d9;
+      }
+    }
+    .cancel-dialog-buttons-container {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate3d(-50%,-50%,0);
+      width: 11.875em;
+
+      .continue {
+        margin-right: 0.625em;
+        display: inline-block;
+        position: static;
+        transform: none;
+        width: 5.625em;
+      }
+      .stop {
+        display: inline-block;
+        position: static;
+        transform: none;
+        width: 5.625em
+      }
+    }
+  }
+}
+
+
+:host /deep/ .p-sidebar{
+  transform: none;
+  transition: all .5s cubic-bezier(.77,0,.175,1);
+  max-width: calc(100% - 29.5em);
+  width: 55em;
+
+  @media (max-width: 79.9375em) {
+    max-width: calc(100% - 23.5em);
+  }
+  @media (max-width: 65.5625em) {
+    max-width: calc(100% - 96px);
+    width: 100%;
+  }
+}
+
+
+
+
+
+
+
+
+

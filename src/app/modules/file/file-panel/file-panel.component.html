@@ -1,0 +1,72 @@
+<div class="panel-container">
+  <div class="transfer-details" *ngIf="uploadResponse">
+    <div class="transfer-banner">
+      ✨   You can edit this transfer before it expires.
+    </div>
+    <h1 class="transfer-title" title="error-905_1_jfh2xz.svg">{{uploadResponse.fileName}}</h1>
+    <div class="transfer-subtitle">
+      <div class="metadata">
+        <span class="metadata__filecount">1 file</span>
+        <span class="metadata__size">{{getFileSize(uploadResponse.fileSize)}}</span>
+        <span class="metadata__date">Sent {{formatUploadDate(uploadResponse.uploadDate)}}</span>
+      </div>
+    </div>
+    <div class="transfer-options">
+      <div class="transfer-link">
+        <input readonly="" class="link" [value]="uploadResponse.downloadURL">
+        <button class="link-copy-button" (click)="copyLink(uploadResponse.downloadURL)" [life]="1000"  pTooltip="Copied" tooltipEvent="focus" tooltipPosition="top" placeholder="Top" [positionTop]="-7">copy link</button>
+      </div>
+      <div class="transfer-buttons">
+        <div class="button-container" (click)="downloadFile.emit(uploadResponse.fileId)">
+          <i class="pi pi-arrow-circle-down"></i>
+          <span>Download</span>
+        </div>
+        <div class="button-container" (click)="toggleDeleteFileDialog()">
+          <i class="pi pi-times-circle"></i>
+          <span>Delete</span>
+        </div>
+      </div>
+    </div>
+    <div class="transfer-detail">
+      <div class="detail">
+        <h2>Expiration date</h2>
+        <div class="sub-text">
+          {{format(parseISO(uploadResponse.expirationDate), 'MMMM d, yyyy')}}
+        </div>
+      </div>
+      <div class="detail">
+        <h2>Password</h2>
+        <div class="sub-text">
+          <div *ngIf="uploadResponse.password !== ''">
+            {{uploadResponse.password}}
+          </div>
+          <div *ngIf="uploadResponse.password === ''">
+            No password..
+          </div>
+        </div>
+      </div>
+      <div class="detail">
+        <h2>Total downloads</h2>
+        <div class="sub-text">
+          {{uploadResponse.downloadCounter}}
+        </div>
+      </div>
+    </div>
+    <div class="confirm-delete-dialog-container fadein animation-duration-500" *ngIf="deleteFileDialog">
+      <div class="confirm-delete-dialog">
+        <div class="confirm-delete-dialog-text">
+          Hold up – are you sure you want to delete this transfer?
+        </div>
+        <div class="confirm-delete-dialog-buttons">
+          <button type="button" class="confirm-delete-dialog-action" tabindex="0" (click)="deleteFile.emit(uploadResponse.fileId)">Delete
+          </button>
+          <button type="button" class="confirm-delete-dialog-cancel" tabindex="0" (click)="toggleDeleteFileDialog()">Cancel
+          </button>
+        </div>
+    </div>
+    </div>
+  </div>
+  <div class="transfer-details" *ngIf="!uploadResponse">
+    <h3>File was deleted</h3>
+  </div>
+</div>

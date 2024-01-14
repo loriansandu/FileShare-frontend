@@ -1,0 +1,246 @@
+.panel-container {
+  height:100%;
+  /*background: wheat;*/
+  min-height: calc(100% - 4.0625em);
+  padding: 3.5em 80px 6.5625em;
+  position: relative;
+  margin: 0 auto;
+  max-width: 80rem;
+
+  .transfer-details {
+    height: 100%;
+    color: black;
+
+    .transfer-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.625rem;
+      height: 5rem;
+      padding: 1rem 1.25rem;
+      background-color: #f7f9fa;
+      border: 1px solid #d4d7d9;
+      border-radius: 0.5rem;
+      font-weight: 400;
+      line-height: 150%;
+      color: #484a4d;
+      font-size: 14px;
+      margin-bottom: 1.5rem;
+    }
+    .transfer-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 0 0.5625rem;
+      font-weight: 400;
+      font-size: 2.5em;
+      height: 75px;
+
+    }
+    .transfer-subtitle {
+      margin-bottom: 1.5625em;
+      border-bottom: 0.0625em solid #e8ebed;
+
+      .metadata {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5625rem;
+        font-weight: 400;
+        color: #6a6d70;
+        font-size: .975em;
+      }
+
+      .metadata>:not(:last-child):after {
+        content: "·";
+        display: inline-block;
+        padding: 0 0.8em;
+        text-decoration: none;
+      }
+
+    }
+    .transfer-options {
+      /*height: 4.8125em;*/
+      margin-bottom: 2.5625em;
+      position: relative;
+      text-align: right;
+      width: 100%;
+      border-bottom: 0.0625em solid #e8ebed;
+      display: flex;
+      padding-bottom: 1.5625em;
+
+      .transfer-link {
+        border: 1px solid #babcbf;
+        border-radius: 5px;
+        display: flex;
+        /*height: 3.5714285714em;*/
+
+        .link {
+          display: inline-block;
+          font-weight: 500;
+          border: 0;
+          border-radius: 5px;
+          color: #484a4d;
+          font-size: .975em;
+          height: 100%;
+          outline: none;
+          padding: 0 2em 0 1.2857142857em;
+          position: relative;
+          width: 21em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .link-copy-button {
+          border: none;
+          font-weight: 500;
+          background-color: #fff;
+          border-radius: 0.3571428571em;
+          color: #5268ff;
+          cursor: pointer;
+          font-size: .875em;
+          line-height: 3.5714285714em;
+          margin-right: 1.4285714286em;
+          padding: 0 0 0 0.8571428571em;
+          user-select: none;
+          z-index: 5;
+          outline: 0;
+          width: max-content;
+
+          &:hover {
+            color: #3741d9;
+          }
+        }
+        .link-copy-button:before {
+          background: linear-gradient(90deg,hsla(0,0%,100%,0) 0,#fff);
+          content: "";
+          display: block;
+          height: 3.5714285714em;
+          left: -2.1428571429em;
+          position: absolute;
+          width: 2.1428571429em;
+        }
+      }
+      .transfer-buttons {
+        height: 3.5714285714em;
+        width: auto;
+        display: flex;
+        color: #5268ff;
+        margin-left: auto;
+
+        .button-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          height: 100%;
+          color: #5268ff;
+          cursor: pointer;
+          margin-left: 1.25em;
+          margin-right: 1.25em;
+          background-color: transparent;
+          outline: 0;
+
+          &:hover {
+            color: #3741d9;
+          }
+
+          i {
+            font-size: 1.5rem;
+            cursor: pointer;
+          }
+          span {
+            font-weight: 500;
+            font-size: .8125rem;
+            margin-top: 8px;
+
+          }
+        }
+      }
+    }
+    .transfer-detail {
+      .detail {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        margin-bottom: 2.5rem;
+
+        h2{
+          font-weight: 700;
+          font-size: 18px;
+        }
+        .sub-text {
+          margin-top: 0.8rem;
+          font-weight: 400;
+          color: #484a4d;
+          font-size: .875rem;
+        }
+      }
+
+    }
+    .confirm-delete-dialog-container {
+      position: fixed;
+      width: fit-content;
+      bottom: 20px;
+
+      .confirm-delete-dialog {
+        background: #5268ff;
+        border-radius: 5px;
+        bottom: 0;
+        box-shadow: 0 3px 20px 0 rgba(0,0,0,.14);
+        color: #fff;
+        height: 4.375em;
+        padding: 0.625em 0;
+        transition: transform .2s cubic-bezier(.77,0,.175,1);
+        z-index: 90;
+        display: flex;
+        align-items: center;
+
+        .confirm-delete-dialog-text {
+          font-weight: 500;
+          line-height: 1.2;
+          margin-left: 1.4285714286em;
+          /*width: 60%;*/
+          text-align: left;
+        }
+        .confirm-delete-dialog-buttons {
+          /*width: 200px;*/
+          margin: 0 50px;
+          button {
+            cursor: pointer;
+            background: #babcbf;
+            font-weight: 500;
+            border: 0;
+            border-radius: 5px;
+            font-size: .875em;
+            height: 3.5714285714em;
+            padding: 0 1.2857142857em;
+            position: relative;
+            text-decoration: none;
+            transition: border-color .2s cubic-bezier(.77,0,.175,1),background-color .2s cubic-bezier(.77,0,.175,1),color .2s cubic-bezier(.77,0,.175,1);
+          }
+
+          .confirm-delete-dialog-action {
+            background: #fff;
+            color: #17181a;
+
+            &:hover {
+              background: hsla(0,0%,100%,.8);
+            }
+          }
+          .confirm-delete-dialog-cancel {
+            border: 1px solid #fff;
+            color: #fff;
+            margin-left: 0.825em;
+            background: #5268ff;
+
+            &:hover {
+              border-color: hsla(0,0%,100%,.8);
+              color: hsla(0,0%,100%,.8);
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+}

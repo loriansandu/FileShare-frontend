@@ -1,0 +1,165 @@
+<div *ngIf="transferState === TransferStateEnum.UploadStopped"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+  class="drag-drop-container"
+  [ngClass]="dragOver ? 'drag-active' : ''"
+  >
+  <div class="drag-drop-text" *ngIf="dragOver">
+    <h1>Drop it like it's hot</h1>
+    <p>Upload a file by dropping it in this window</p>
+  </div>
+
+</div>
+<div *ngIf="transferState !== TransferStateEnum.UploadStopped"
+     class="drag-drop-container"
+>
+</div>
+<div class="container" *ngIf="!dragOver">
+<!--  <p-button type="button" class="mr-2" (click)="sidebarVisible2 = true" icon="pi pi-arrow-left"></p-button>-->
+  <div class="uploading-stopped-container" *ngIf="transferState === TransferStateEnum.UploadStopped">
+    <div class="upload" *ngIf="!selectedFile" (click)="triggerInputClick()">
+      <input type="file" #fileInput (change)="onSelectFile($event)" class="file-input"/>
+      <p-button icon="pi pi-plus" [rounded]="true" styleClass="select-file-button"></p-button>
+      <div>
+        <div class="select-file-text">Upload a file</div>
+        <button class="select-file-subtext">Or drag it in this window</button>
+      </div>
+    </div>
+    <div class="uploaded-files-list" *ngIf="selectedFile">
+      <div class="uploaded-file" (mouseover)="showDeleteFileButton = true" (mouseleave)="showDeleteFileButton = false">
+        <div class="uploaded-file-title">{{selectedFile.name}}</div>
+        <div class="uploaded-file-info">{{formatFileSize(selectedFile.size)}} ∙ {{getFileExtension(selectedFile.name)}}</div>
+        <div>
+          <button *ngIf="showDeleteFileButton" class="uploaded-file-delete-button" (click)="deleteFile()">
+            <svg viewBox="-1 -1 16 16"><path fill="#797C7F" fill-rule="evenodd" d="M7 5.586L4.738 3.324c-.315-.315-.822-.31-1.136.003l-.186.186c-.315.315-.317.824-.004 1.137l2.262 2.262-2.35 2.35c-.315.315-.31.822.003 1.136l.186.186c.315.315.824.317 1.137.004L7 8.238l2.35 2.35c.315.315.822.31 1.137-.004l.186-.186c.314-.314.316-.823.003-1.136l-2.35-2.35 2.262-2.262c.315-.315.31-.822-.004-1.137l-.186-.186c-.314-.314-.823-.316-1.136-.003L7 5.586z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="file-size-limit-container">
+      <span class="file-size-limit">Up to 2 GB free</span>
+    </div>
+    <div class="file-options">
+      <div class="file-expire">
+        <label>Expires in</label>
+<!--        <span class="transfer__option-placeholder">7 days-->
+<!--        <i class="pi pi-angle-down" style="font-size: 1rem; margin-left: 8px; height: 0.65em; color: rgb(82, 104, 255);width: 0.65em;"></i>-->
+<!--        </span>-->
+        <p-dropdown [options]="fileExpirationOptions" [(ngModel)]="fileExpirationDays" styleClass="days-dropdown"></p-dropdown>
+      </div>
+      <form class="file-password" style="border:none">
+        <label for="filePassword">Password</label>
+        <input type="password" [(ngModel)]="filePassword" name="filePassword" id="filePassword" placeholder="Set password" >
+      </form>
+    </div>
+
+  </div>
+  <div class="uploading-in-progress-container" *ngIf="transferState === TransferStateEnum.UploadInProgress">
+    <div class="loading-circle-container">
+      <app-progress-circle [progress]="percentDone"></app-progress-circle>
+      <div class="percentage">
+        <div class="number">
+          {{percentDone}}
+        </div>
+        <div class="sign">
+          %
+        </div>
+      </div>
+    </div>
+    <div class="transfer-in-progress" *ngIf="transferState === TransferStateEnum.UploadInProgress">
+      <h2 class="transfer">Transferring...</h2>
+      <p>{{formatFileSize(loadedBytes)}} of {{formatFileSize(totalBytes)}} uploaded</p>
+      <p>About {{remainingTime}} remaining</p>
+    </div>
+  </div>
+  <div class="uploading-success-container" *ngIf="transferState === TransferStateEnum.UploadSuccess">
+    <video class="upload-success-video" autoplay loop playsinline webkit-playsinline="webkit-playsinline" preload="auto" aria-hidden="true">
+      <source src="assets/transfer_completed_2023-1.mp4" type="video/mp4">
+    </video>
+    <div class="upload-success-info">
+      <h2 tabindex="-1">You’re done!</h2>
+      <p class="upload-message">
+        Copy your download link or
+        <span (click)="sidebarVisible2 = true" style="color: blue;cursor: pointer; text-decoration: underline">see what's inside</span>
+      </p>
+      <div class="upload-link">
+        <div class="upload-link-wrapper">
+          <input #textInput class="upload-link-url" (click)="onSelectAll()" readonly="" value="{{uploadResponse?.downloadURL}}" >
+          <div class="copy-link-icon-container" (click)="copyLink()" [life]="1000"  pTooltip="Copied" tooltipEvent="focus" tooltipPosition="top" placeholder="Top" [positionTop]="-7" >
+            <i class="pi pi-copy" style=""></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="uploading-download-container" *ngIf="transferState === TransferStateEnum.Download">
+    <div class="uploading-download-header">
+      <div *ngIf="!isDownloadedFileLocked">
+        <svg class="uploading-download-image" viewBox="0 0 170 170">
+          <g fill="#d4d7d9" fill-rule="evenodd">
+            <path d="M145.104 24.896c33.195 33.194 33.195 87.014 0 120.208-33.194 33.195-87.014 33.195-120.208 0C-8.3 111.91-8.3 58.09 24.896 24.896 58.09-8.3 111.91-8.3 145.104 24.896zm-7.071 7.071c-29.29-29.29-76.777-29.29-106.066 0-29.29 29.29-29.29 76.777 0 106.066 29.29 29.29 76.777 29.29 106.066 0 29.29-29.29 29.29-76.777 0-106.066z">
+            </path>
+            <path d="M82 100.843V59.007A4.006 4.006 0 0 1 86 55c2.21 0 4 1.794 4 4.007v41.777l15.956-15.956a4.003 4.003 0 0 1 5.657 0 4.004 4.004 0 0 1 0 5.657l-22.628 22.628a3.99 3.99 0 0 1-3.017 1.166 3.992 3.992 0 0 1-3.012-1.166L60.328 90.485a4.003 4.003 0 0 1 0-5.657 4.004 4.004 0 0 1 5.657 0L82 100.843z">
+            </path>
+          </g>
+        </svg>
+        <h2 class="uploading-download-title">Ready when you are</h2>
+        <p class="uploading-download-subtitle">Transfer expires {{daysUntilSelectedDate(downloadResponse?.expirationDate)}}</p>
+      </div>
+      <div *ngIf="isDownloadedFileLocked">
+        <div class="alert-error fadein animation-duration-100" *ngIf="wrongPassword">Wrong password.</div>
+        <svg class="uploading-download-image" viewBox="0 0 170 170">
+          <g fill="#d4d7d9" fill-rule="evenodd">
+            <path d="M145.104 24.896c33.195 33.194 33.195 87.014 0 120.208-33.194 33.195-87.014 33.195-120.208 0C-8.3 111.91-8.3 58.09 24.896 24.896 58.09-8.3 111.91-8.3 145.104 24.896zm-7.071 7.071c-29.29-29.29-76.777-29.29-106.066 0-29.29 29.29-29.29 76.777 0 106.066 29.29 29.29 76.777 29.29 106.066 0 29.29-29.29 29.29-76.777 0-106.066z">
+            </path>
+            <path d="M82 100.843V59.007A4.006 4.006 0 0 1 86 55c2.21 0 4 1.794 4 4.007v41.777l15.956-15.956a4.003 4.003 0 0 1 5.657 0 4.004 4.004 0 0 1 0 5.657l-22.628 22.628a3.99 3.99 0 0 1-3.017 1.166 3.992 3.992 0 0 1-3.012-1.166L60.328 90.485a4.003 4.003 0 0 1 0-5.657 4.004 4.004 0 0 1 5.657 0L82 100.843z">
+            </path>
+          </g>
+        </svg>
+        <h2 class="uploading-download-title">File is locked</h2>
+        <p class="uploading-download-subtitle">In order to access the file please enter the password</p>
+      </div>
+    </div>
+    <div class="uploading-download-file-details">
+      <div *ngIf="!isDownloadedFileLocked">
+        <div class="file-name">
+          {{downloadResponse?.fileName}}
+        </div>
+        <div class="file-details">
+          <div class="file-details-size">
+            {{getFileSize(downloadResponse?.fileSize)}}
+          </div>
+          <div class="file-details-type">
+            {{getFileExtension(downloadResponse?.fileName)}}
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isDownloadedFileLocked">
+        <form class="file-password" style="border:none">
+          <label for="fileLockedPassword">Password</label>
+          <input type="password" [(ngModel)]="fileLockedPassword" name="filePassword" id="fileLockedPassword" placeholder="" (focusin)="wrongPassword = false" >
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="uploading-expired-container" *ngIf="transferState === FileState.Expired">
+    <video class="upload-expired-video" autoplay loop playsinline webkit-playsinline="webkit-playsinline" preload="auto" aria-hidden="true">
+      <source src="assets/transfer_expired_2023.mp4" type="video/mp4">
+    </video>
+    <h2>Transfer expired</h2>
+    <p>Sorry, this transfer has expired and is not available any more</p>
+  </div>
+  <div class="submit-container">
+    <button type="button" class="transfer-button submit" *ngIf="transferState === TransferStateEnum.UploadStopped" (click)="onUploadFiles(selectedFile!, fileExpirationDays, filePassword)" [ngClass]="!selectedFile? 'submit-button-inactive' : ''">Get a link</button>
+    <button type="button" class="transfer-button cancel" *ngIf="transferState === TransferStateEnum.UploadInProgress" (click)="cancelUpload()" [ngClass]="!selectedFile? 'cancel-button-inactive' : ''">Cancel</button>
+    <button type="button" class="transfer-button submit" *ngIf="transferState === TransferStateEnum.UploadSuccess" (click)="resetValues()">Send a new file ?</button>
+    <button type="button" class="transfer-button submit" *ngIf="transferState === TransferStateEnum.Download && !isDownloadedFileLocked" (click)="onDownloadFile(downloadResponse!.fileId)">Download</button>
+    <button type="button" class="transfer-button cancel" *ngIf="transferState === TransferStateEnum.Download && isDownloadedFileLocked" (click)="onGetFileInfo(fileId)">Unlock</button>
+    <button type="button" class="transfer-button cancel" *ngIf="transferState === TransferStateEnum.Expired" (click)="redirectToHome()">Send a file ?</button>
+  </div>
+</div>
+<p-sidebar *ngIf="transferState === TransferStateEnum.UploadSuccess" [(visible)]="sidebarVisible2" styleClass="side" position="right" >
+  <app-file-panel [uploadResponse]="uploadResponse" (downloadFile)="onDownloadFile($event)" (deleteFile)="onDeleteFile($event)"></app-file-panel>
+</p-sidebar>
+
