@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "FileShare-frontend:build:production"
+              "buildTarget": "FileShare-frontend:build:production"
             },
             "development": {
-              "browserTarget": "FileShare-frontend:build:development"
+              "buildTarget": "FileShare-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "FileShare-frontend:build"
+            "buildTarget": "FileShare-frontend:build"
           }
         },
         "test": {
