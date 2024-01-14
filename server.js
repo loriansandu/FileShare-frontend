@@ -15,4 +15,4 @@ app.get('/*', (req, res) =>
   res.sendFile('index.html', {root: 'dist/file-share-frontend/'}),
 );
 
-app.listen( 4200);
+app.listen(process.env.PORT || 4200);
