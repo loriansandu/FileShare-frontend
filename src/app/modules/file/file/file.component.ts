@@ -89,7 +89,7 @@ export class FileComponent implements OnInit{
         )
       }
       else {
-        this.transferState = this.TransferStateEnum.UploadInProgress;
+        this.transferState = this.TransferStateEnum.UploadStopped;
       }
     });
 
