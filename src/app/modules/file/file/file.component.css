@@ -25,14 +25,16 @@
     text-align: center;
     color: white;
 
-    h1 {
+    :is(h1) {
       margin-bottom: 20px;
     }
-    p {
+    :is(p) {
       font-size: 18px;
     }
   }
 }
+
+
 
 .container {
   height: 25.625em;
@@ -142,18 +144,18 @@
         cursor: pointer;
         border: 0;
 
-        svg {
+        :is(svg) {
           height: 1.25rem;
           width: 1.25rem;
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
 
-          path {
+          :is(path) {
             fill: #5268ff;
           }
         }
-        svg:hover path {
+        :is(svg):hover :is(path) {
           fill: #3741d9;
         }
       }
@@ -179,13 +181,13 @@
       /*border-top: 1px solid #d4d7d9;*/
       padding: 0 10px;
 
-      .file-expire, .file-password{
+      .file-expire, .file-password {
         border-bottom: 1px solid #d4d7d9;
         cursor: default;
         padding: 0.625em;
         position: relative;
 
-        label{
+        :is(label) {
           box-sizing: border-box;
           font-weight: 400;
           color: #484a4d;
@@ -194,7 +196,7 @@
           margin: 0 0.625em 5px 0;
           width: 10.1666666667em;
         }
-        input {
+        :is(input) {
           cursor: pointer;
           display: inline;
           font-size: .875em;
@@ -248,10 +250,6 @@
       margin-top: 30px;
       margin-bottom: 20px;
 
-      #progress{
-        height: 200px;
-        width: 200px;
-      }
       .percentage {
         position: absolute;
         display: flex;
@@ -290,7 +288,7 @@
         text-align: center;
 
       }
-      p {
+      :is(p) {
         color: #484a4d;
         font-weight: 400;
         font-family: -apple-system,\.SFNSText-Regular,San Francisco,Roboto,Segoe UI,Helvetica Neue,Lucida Grande,sans-serif;
@@ -344,7 +342,7 @@
       white-space: pre-wrap;
       line-height: 1.5em;
 
-      h2 {
+      :is(h2) {
         font-size: 1.25rem;
         margin-bottom: 0.375rem;
         font-weight: 500;
@@ -516,7 +514,7 @@
         padding: 0.625em;
         position: relative;
 
-        label{
+        :is(label) {
           box-sizing: border-box;
           font-weight: 400;
           color: #484a4d;
@@ -525,7 +523,7 @@
           margin: 0 0.625em 5px 0;
           width: 10.1666666667em;
         }
-        input {
+        :is(input) {
           width: 100%;
           cursor: pointer;
           display: inline;
@@ -563,7 +561,7 @@
       height: 12.5rem;
       width: 17.5rem;
     }
-    h2 {
+    :is(h2) {
       font-weight: 400;
       color: #17181a;
       font-size: 1.375em;
@@ -572,7 +570,7 @@
       text-align: center;
       margin: 0 0 1.1875em;
     }
-    p {
+    :is(p) {
       font-weight: 400;
       font-size: .8125em;
       color: #484a4d;
@@ -658,6 +656,19 @@
     }
   }
 }
+
+:host /deep/ .p-toast .p-toast-message .p-toast-message-content {
+  padding: 1rem;
+  border-width: 0 0 0 6px;
+
+  .p-toast-detail {
+    margin: 0.5rem 0 0 0;
+  }
+  .p-toast-message-text {
+    margin: 0 0 0 1rem;
+  }
+}
+
 
 
 :host /deep/ .p-sidebar{

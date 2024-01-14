@@ -15,6 +15,7 @@
      class="drag-drop-container"
 >
 </div>
+<p-toast position="top-left" [life]="1000"></p-toast>
 <div class="container" *ngIf="!dragOver">
 <!--  <p-button type="button" class="mr-2" (click)="sidebarVisible2 = true" icon="pi pi-arrow-left"></p-button>-->
   <div class="uploading-stopped-container" *ngIf="transferState === TransferStateEnum.UploadStopped">

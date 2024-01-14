@@ -8,6 +8,7 @@ import {BehaviorSubject, Subject, takeUntil} from "rxjs";
 import {Tooltip} from "primeng/tooltip";
 import {FileDetails} from "../models/FileDetails";
 import {getFileSize, getFileExtension, daysUntilSelectedDate} from "../utils";
+import {MessageService} from "primeng/api";
 
 enum TransferState {
   UploadInProgress,
@@ -27,6 +28,7 @@ export class FileComponent implements OnInit{
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('textInput', { static: false }) textInput!: ElementRef;
   @ViewChild(Tooltip) tooltip!: Tooltip;
+  MAXSIZEBYTES = 100 * 1024 * 1024;
   response!: any;
   selectedFile: File | undefined;
   loadedBytes: number = 0;
@@ -59,14 +61,11 @@ export class FileComponent implements OnInit{
   fileLockedPassword: string = '';
   isDownloadedFileLocked!: boolean ;
   fileId!: string;
-  constructor(private fileService: FileService, private route: ActivatedRoute, private router: Router) {}
-  resetValues() {
-    this.selectedFile = undefined;
-    this.filePassword = '';
-    this.uploadResponse = undefined;
-    this.transferState = TransferState.UploadStopped;
-    this.fileExpirationDays = '7 days'
-  }
+  constructor(private fileService: FileService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private messageService: MessageService,) {}
+
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
        this.fileId = params['param']
@@ -90,15 +89,28 @@ export class FileComponent implements OnInit{
         )
       }
       else {
-        this.transferState = this.TransferStateEnum.UploadStopped;
+        this.transferState = this.TransferStateEnum.UploadInProgress;
       }
     });
 
   }
   onSelectFile(event: any) : void {
-    this.selectedFile = event.target.files[0]
+    const file : File = event.target.files[0];
+    this.selectedFile = this.checkFileSize(file);
   }
 
+  checkFileSize(file : File) : File | undefined {
+    if (file.size <= this.MAXSIZEBYTES) {
+      return file;
+    }
+    else {
+      this.messageService.add({
+        severity: 'error',
+        detail: 'File size exceeds the 100MB limit.',
+      });
+      return undefined;
+    }
+  }
   cancelUpload() {
     this.unsubscribeUpload.next();
     this.unsubscribeUpload.complete();
@@ -198,8 +210,9 @@ export class FileComponent implements OnInit{
     event.preventDefault();
     event.stopPropagation();
     this.dragOver = false;
-    const file = event.dataTransfer?.files;
-    this.selectedFile = file?.item(0) || undefined;
+    const file = event.dataTransfer?.files.item(0);
+    this.selectedFile = this.checkFileSize(file!);
+
   }
   onSelectAll() {
     this.textInput.nativeElement.select();
@@ -245,24 +258,17 @@ export class FileComponent implements OnInit{
   redirectToHome() {
     this.router.navigate(['/']);
   }
-
-  shareOnMessenger() {
-    const link = `http://www.facebook.com/dialog/send?app_id=1616327295777171&link=https://stackoverflow.com&redirect_uri=https://stackoverflow.com`
-    // const facebookMessengerLink = `https://www.facebook.com/dialog/send?link=${encodeURIComponent('google.ro')}&app_id=1616327295777171`;
-    window.open(link, '_blank');
-
+  resetValues() {
+    this.selectedFile = undefined;
+    this.filePassword = '';
+    this.uploadResponse = undefined;
+    this.transferState = TransferState.UploadStopped;
+    this.fileExpirationDays = '7 days'
   }
-
 
   protected readonly daysUntilSelectedDate = daysUntilSelectedDate;
   protected readonly getFileSize = getFileSize;
   protected readonly FileState = TransferState;
   wrongPassword: boolean = false;
-  searchByTokenValue: string = '';
 
-  protected readonly alert = alert;
-
-  searchTransfer(searchByTokenValue: string) {
-
-  }
 }

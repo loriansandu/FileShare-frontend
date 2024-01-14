@@ -11,6 +11,8 @@ import { FilePanelComponent } from './file-panel/file-panel.component';
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";
+import {ToastModule} from "primeng/toast";
+import {MessageService} from "primeng/api";
 
 
 @NgModule({
@@ -28,6 +30,8 @@ import {InputTextModule} from "primeng/inputtext";
     DropdownModule,
     FormsModule,
     InputTextModule,
-  ]
+    ToastModule,
+  ],
+  providers: [MessageService]
 })
 export class FileModule { }
