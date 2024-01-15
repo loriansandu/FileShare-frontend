@@ -142,7 +142,6 @@ export class FileComponent implements OnInit{
         }
       },
       (error) => {
-        console.error('Error uploading file:', error);
         this.redirectToHome()
       }
     );
@@ -256,7 +255,6 @@ export class FileComponent implements OnInit{
     this.tooltip.activate();
     navigator.clipboard.writeText(this.textInput.nativeElement.value).then(() => {
     }).catch((error) => {
-      console.error('Unable to copy text to clipboard', error);
     });
   }
   redirectToHome() {
