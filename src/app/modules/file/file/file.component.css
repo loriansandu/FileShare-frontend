@@ -722,7 +722,9 @@
 
 
 
-
+.page-container {
+  overflow: hidden;
+}
 
 
 
