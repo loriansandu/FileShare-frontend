@@ -16,7 +16,6 @@
 
 .drag-active {
   background: #5268FF;
-
   .drag-drop-text {
     pointer-events: none;
     position: absolute;
@@ -34,8 +33,6 @@
   }
 }
 
-
-
 .container {
   height: 25.625em;
   left: 5em;
@@ -49,7 +46,7 @@
   top: 50%;
   z-index: 30;
   width: 17.5em;
-  transition: transform .5s cubic-bezier(.77,0,.175,1);
+  /*transition: transform .5s cubic-bezier(.77,0,.175,1);*/
 
   .uploading-stopped-container {
     .upload {
@@ -599,12 +596,15 @@
       border-radius: 1.25em;
       box-sizing: border-box;
       cursor: pointer;
-      display: inline-block;
+      /*display: inline-block;*/
       font-size: 1em;
       height: 2.5em;
       outline: 0;
       font-weight: 500;
       width: 9.75em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
     }
     .submit {
@@ -657,6 +657,41 @@
   }
 }
 
+@media(max-width: 768px) {
+  .container {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+}
+
+.credits {
+  position: absolute;
+  top: 30px;
+  right: 10em;
+  display: flex;
+  align-items:center;
+  .credits-text {
+    width: fit-content;
+    margin-right: 10px;
+  }
+  i {
+    font-size: 30px;
+  }
+}
+
+@media(max-width: 768px) {
+  .credits {
+    margin-top: 10px;
+    top: 70px;
+    /*width: 100%;*/
+    right: unset;
+    left: 10%;
+    font-size: smaller;
+  }
+}
+
 :host /deep/ .p-toast .p-toast-message .p-toast-message-content {
   padding: 1rem;
   border-width: 0 0 0 6px;
@@ -669,8 +704,6 @@
   }
 }
 
-
-
 :host /deep/ .p-sidebar{
   transform: none;
   transition: all .5s cubic-bezier(.77,0,.175,1);
@@ -681,9 +714,10 @@
     max-width: calc(100% - 23.5em);
   }
   @media (max-width: 65.5625em) {
-    max-width: calc(100% - 96px);
+    max-width: 100%;
     width: 100%;
   }
+
 }
 
 

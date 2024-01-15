@@ -172,15 +172,19 @@ export class FileComponent implements OnInit{
     );
   }
   onDownloadFile(fileId: string): void {
-    this.fileService.download(fileId).subscribe(
-      response => {
-        saveAs(new File([response.body!], response.headers.get('File-Name')!,
+    if(!this.downloadInProgress) {
+      this.downloadInProgress = true;
+      this.fileService.download(fileId).subscribe(
+        response => {
+          saveAs(new File([response.body!], response.headers.get('File-Name')!,
             {type: `${response.headers.get('Content-Type')};charset=utf-8`}));
-      },
-      (error: HttpErrorResponse) => {
-        this.redirectToHome()
-      }
-    );
+          this.downloadInProgress = false;
+        },
+        (error: HttpErrorResponse) => {
+          this.redirectToHome()
+        }
+      );
+    }
   }
 
   onDeleteFile(fileId: string): void {
@@ -270,5 +274,14 @@ export class FileComponent implements OnInit{
   protected readonly getFileSize = getFileSize;
   protected readonly FileState = TransferState;
   wrongPassword: boolean = false;
+  downloadInProgress: boolean = false;
 
+  goHome() {
+    this.resetValues();
+    this.redirectToHome();
+  }
+
+  redirectToGithub() {
+    window.open('https://github.com/loriansandu/FileShare', '_blank')
+  }
 }

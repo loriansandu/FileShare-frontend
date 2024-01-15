@@ -244,3 +244,70 @@
   }
 
 }
+
+@media(max-width: 768px) {
+  .panel-container {
+    padding: 20px;
+    overflow: hidden;
+    .transfer-details {
+      .transfer-title {
+        text-align: center;
+      }
+      .transfer-subtitle {
+        margin-bottom: 35px;
+        .metadata {
+          justify-content: center;
+        }
+      }
+      .transfer-options {
+        flex-direction: column;
+        padding-bottom: 35px;
+        .transfer-link {
+          .link{
+            width: 73%;
+            text-overflow: unset;
+          }
+
+          align-items: center;
+          margin-bottom: 15px;
+        }
+        .transfer-buttons {
+          width: 100%;
+          justify-content: center;
+          .button-container {
+            height: auto;
+          }
+        }
+      }
+      .transfer-detail {
+        padding: 10px;
+      }
+      .confirm-delete-dialog-container {
+        left: 0;
+        bottom: 0;
+        .confirm-delete-dialog {
+          padding: 10px;
+          .confirm-delete-dialog-text {
+            flex: 1;
+            font-size: small;
+            margin-left: 0;
+
+          }
+          .confirm-delete-dialog-buttons {
+            margin: 0;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            b {
+              font-size: x-small;
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+
+
+}
