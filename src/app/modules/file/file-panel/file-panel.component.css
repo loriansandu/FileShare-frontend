@@ -248,7 +248,7 @@
 @media(max-width: 768px) {
   .panel-container {
     padding: 20px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     .transfer-details {
       .transfer-title {
         text-align: center;
