@@ -1,3 +1,4 @@
+<img src="assets/file---share-high-resolution-logo-transparent.png" alt="logo" height="50px" style="position:fixed;top: 20px; left: 5em; cursor: pointer" (click)="goHome()">
 <div *ngIf="transferState === TransferStateEnum.UploadStopped"
   (dragover)="onDragOver($event)"
   (dragleave)="onDragLeave($event)"
@@ -18,8 +19,8 @@
 <p-toast position="top-left" [life]="1000"></p-toast>
 <div class="container" *ngIf="!dragOver">
 <!--  <p-button type="button" class="mr-2" (click)="sidebarVisible2 = true" icon="pi pi-arrow-left"></p-button>-->
-  <div class="uploading-stopped-container" *ngIf="transferState === TransferStateEnum.UploadStopped">
-    <div class="upload" *ngIf="!selectedFile" (click)="triggerInputClick()">
+  <div class="uploading-stopped-container fadein animation-duration-250" *ngIf="transferState === TransferStateEnum.UploadStopped">
+    <div class="upload fadein animation-duration-100" *ngIf="!selectedFile" (click)="triggerInputClick()">
       <input type="file" #fileInput (change)="onSelectFile($event)" class="file-input"/>
       <p-button icon="pi pi-plus" [rounded]="true" styleClass="select-file-button"></p-button>
       <div>
@@ -27,7 +28,7 @@
         <button class="select-file-subtext">Or drag it in this window</button>
       </div>
     </div>
-    <div class="uploaded-files-list" *ngIf="selectedFile">
+    <div class="uploaded-files-list"  *ngIf="selectedFile">
       <div class="uploaded-file" (mouseover)="showDeleteFileButton = true" (mouseleave)="showDeleteFileButton = false">
         <div class="uploaded-file-title">{{selectedFile.name}}</div>
         <div class="uploaded-file-info">{{formatFileSize(selectedFile.size)}} ∙ {{getFileExtension(selectedFile.name)}}</div>
@@ -56,7 +57,7 @@
     </div>
 
   </div>
-  <div class="uploading-in-progress-container" *ngIf="transferState === TransferStateEnum.UploadInProgress">
+  <div class="uploading-in-progress-container fadein animation-duration-250" *ngIf="transferState === TransferStateEnum.UploadInProgress">
     <div class="loading-circle-container">
       <app-progress-circle [progress]="percentDone"></app-progress-circle>
       <div class="percentage">
@@ -74,7 +75,7 @@
       <p>About {{remainingTime}} remaining</p>
     </div>
   </div>
-  <div class="uploading-success-container" *ngIf="transferState === TransferStateEnum.UploadSuccess">
+  <div class="uploading-success-container fadein animation-duration-250" *ngIf="transferState === TransferStateEnum.UploadSuccess">
     <video class="upload-success-video" autoplay loop playsinline webkit-playsinline="webkit-playsinline" preload="auto" aria-hidden="true">
       <source src="assets/transfer_completed_2023-1.mp4" type="video/mp4">
     </video>
@@ -94,7 +95,7 @@
       </div>
     </div>
   </div>
-  <div class="uploading-download-container" *ngIf="transferState === TransferStateEnum.Download">
+  <div class="uploading-download-container fadein animation-duration-250" *ngIf="transferState === TransferStateEnum.Download">
     <div class="uploading-download-header">
       <div *ngIf="!isDownloadedFileLocked">
         <svg class="uploading-download-image" viewBox="0 0 170 170">
@@ -144,7 +145,7 @@
       </div>
     </div>
   </div>
-  <div class="uploading-expired-container" *ngIf="transferState === FileState.Expired">
+  <div class="uploading-expired-container fadein animation-duration-250" *ngIf="transferState === FileState.Expired">
     <video class="upload-expired-video" autoplay loop playsinline webkit-playsinline="webkit-playsinline" preload="auto" aria-hidden="true">
       <source src="assets/transfer_expired_2023.mp4" type="video/mp4">
     </video>
@@ -155,7 +156,10 @@
     <button type="button" class="transfer-button submit" *ngIf="transferState === TransferStateEnum.UploadStopped" (click)="onUploadFiles(selectedFile!, fileExpirationDays, filePassword)" [ngClass]="!selectedFile? 'submit-button-inactive' : ''">Get a link</button>
     <button type="button" class="transfer-button cancel" *ngIf="transferState === TransferStateEnum.UploadInProgress" (click)="cancelUpload()" [ngClass]="!selectedFile? 'cancel-button-inactive' : ''">Cancel</button>
     <button type="button" class="transfer-button submit" *ngIf="transferState === TransferStateEnum.UploadSuccess" (click)="resetValues()">Send a new file ?</button>
-    <button type="button" class="transfer-button submit" *ngIf="transferState === TransferStateEnum.Download && !isDownloadedFileLocked" (click)="onDownloadFile(downloadResponse!.fileId)">Download</button>
+    <button type="button" class="transfer-button" [ngClass]="downloadInProgress ? 'cancel' : 'submit'" *ngIf="transferState === TransferStateEnum.Download && !isDownloadedFileLocked" (click)="onDownloadFile(downloadResponse!.fileId)">
+      <i *ngIf="downloadInProgress" class="pi pi-spin pi-spinner" style="font-size: 1.2rem"></i>
+      <div *ngIf="!downloadInProgress">Download</div>
+    </button>
     <button type="button" class="transfer-button cancel" *ngIf="transferState === TransferStateEnum.Download && isDownloadedFileLocked" (click)="onGetFileInfo(fileId)">Unlock</button>
     <button type="button" class="transfer-button cancel" *ngIf="transferState === TransferStateEnum.Expired" (click)="redirectToHome()">Send a file ?</button>
   </div>
@@ -163,4 +167,10 @@
 <p-sidebar *ngIf="transferState === TransferStateEnum.UploadSuccess" [(visible)]="sidebarVisible2" styleClass="side" position="right" >
   <app-file-panel [uploadResponse]="uploadResponse" (downloadFile)="onDownloadFile($event)" (deleteFile)="onDeleteFile($event)"></app-file-panel>
 </p-sidebar>
+<div class="credits">
+   <div class="credits-text">
+     App developed by Lorian Sandu
+   </div>
+  <i class="pi pi-github" style="color: #5268FF; cursor:pointer" (click)="redirectToGithub()"></i>
+</div>
 
